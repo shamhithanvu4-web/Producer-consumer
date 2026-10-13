@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BufferOps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Saira+Stencil+One&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="backdrop" aria-hidden="true">
+  <div class="bg bg-mesh"></div>
+  <div class="bg bg-camo"></div>
+  <canvas class="bg-topo" id="topo"></canvas>
+  <div class="bg bg-dots"></div>
+  <div class="bg bg-spot"></div>
+  <div class="bg bg-vignette"></div>
+</div>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav-wrap">
+  <nav class="nav" aria-label="Sections">
+    <a class="nav-mark" href="#top">BufferOps</a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#story" data-nav="story">Story</a>
+        <a href="#conflict" data-nav="conflict">Conflict</a>
+        <a href="#rules" data-nav="rules">Rules</a>
+        <a href="#simulator" data-nav="simulator">Simulator</a>
+        <a href="#logic" data-nav="logic">Logic</a>
+      </div>
+      <span class="nav-sc" id="nav-sc">SC 01 / 07</span>
+    </div>
+    <span class="nav-prog" aria-hidden="true"><i id="nav-prog"></i></span>
+  </nav>
+</header>
+
+<main class="page">
+
+<!-- SCENE 1 -->
+<section class="hero" id="top" aria-labelledby="t-hero">
+  <div class="hero-copy">
+    <p class="slate"><span class="clap" aria-hidden="true"></span>Scene 01 <span class="sep">·</span> Opening shot</p>
+    <h1 class="wordmark" id="t-hero">BufferOps</h1>
+    <p class="tagline">Two workers. One shared space.</p>
+    <p class="question">What happens when one creates faster than the other can consume?</p>
+    <p class="support">An interactive exploration of the Producer–Consumer Problem.</p>
+    <div class="cta">
+      <a class="btn" href="#story">Understand the story</a>
+      <a class="btn primary" href="#simulator">Run the simulation
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l7-4.5z" fill="currentColor"/></svg>
+      </a>
+    </div>
+    <div class="covers"><span class="eyebrow">Covers</span><span class="tagchip">Synchronization</span><span class="tagchip">Mutual exclusion</span><span class="tagchip">Buffer management</span></div>
+  </div>
+
+  <div class="glass reel" id="reel">
+    <button class="actor p" id="hero-p" type="button"><span class="badge p" aria-hidden="true">P</span><span class="actor-name">Producer</span><span class="actor-sub">Click to add an item</span></button>
+    <div class="track" id="hero-tl" aria-hidden="true"><span class="packet"></span></div>
+    <div class="reel-buffer"><span class="reel-label">Shared buffer · 5 slots</span><div class="slots" id="hero-slots"></div></div>
+    <div class="track" id="hero-tr" aria-hidden="true"><span class="packet"></span></div>
+    <button class="actor c" id="hero-c" type="button"><span class="badge c" aria-hidden="true">C</span><span class="actor-name">Consumer</span><span class="actor-sub">Click to take an item</span></button>
+    <p class="status-line reel-cap" id="reel-cap" data-kind="ok" aria-live="polite"><span class="sl-ico"></span><span class="sl-text">Try it: fill the buffer with the producer, or empty it with the consumer.</span></p>
+  </div>
+
+  <nav class="filmstrip" aria-label="Scene index">
+    <div class="strip-track">
+      <div class="strip-set">
+        <a class="frame" href="#top"><span class="fn">01</span><span class="ft">Opening shot</span></a>
+        <a class="frame" href="#story"><span class="fn">02</span><span class="ft">Meet the cast</span></a>
+        <a class="frame" href="#conflict"><span class="fn">03</span><span class="ft">The conflict</span></a>
+        <a class="frame" href="#rules"><span class="fn">04</span><span class="ft">The turning point</span></a>
+        <a class="frame" href="#simulator"><span class="fn">05</span><span class="ft">The climax</span></a>
+        <a class="frame" href="#takes"><span class="fn">06</span><span class="ft">Alternate takes</span></a>
+        <a class="frame" href="#logic"><span class="fn">07</span><span class="ft">End credits</span></a>
+      </div>
+      <div class="strip-set" aria-hidden="true">
+        <a class="frame" href="#top" tabindex="-1"><span class="fn">01</span><span class="ft">Opening shot</span></a>
+        <a class="frame" href="#story" tabindex="-1"><span class="fn">02</span><span class="ft">Meet the cast</span></a>
+        <a class="frame" href="#conflict" tabindex="-1"><span class="fn">03</span><span class="ft">The conflict</span></a>
+        <a class="frame" href="#rules" tabindex="-1"><span class="fn">04</span><span class="ft">The turning point</span></a>
+        <a class="frame" href="#simulator" tabindex="-1"><span class="fn">05</span><span class="ft">The climax</span></a>
+        <a class="frame" href="#takes" tabindex="-1"><span class="fn">06</span><span class="ft">Alternate takes</span></a>
+        <a class="frame" href="#logic" tabindex="-1"><span class="fn">07</span><span class="ft">End credits</span></a>
+      </div>
+    </div>
+  </nav>
+</section>
+
+<!-- SCENE 2 -->
+<section class="scene" id="story" data-no="02" aria-labelledby="t-story">
+  <header class="scene-head reveal">
+    <p class="slate"><span class="clap" aria-hidden="true"></span>Scene 02 <span class="sep">·</span> Meet the cast</p>
+    <h2 id="t-story">Three roles on one shared stage</h2>
+  </header>
+
+  <div class="logline reveal">
+    <p class="eyebrow">Logline</p>
+    <p class="text">Two workers operate at different speeds. One creates items; the other processes them. Between them sits a storage area with limited space. When production outruns consumption, the space fills up. When consumption outruns production, it empties. To keep the operation running safely, the workers must learn when to act, when to wait, and how to share access.</p>
+  </div>
+
+  <p class="hint reveal" style="margin-bottom:14px"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.5-3.6M13 2.5v2.6h-2.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Click a card to turn it over and see its OS role.</p>
+
+  <div class="grid-3">
+    <div class="cast-wrap reveal" style="--d:0s"><div class="tilt"><div class="flip">
+      <article class="face front">
+        <div class="cast-top"><span class="badge p" aria-hidden="true">P</span><span class="film-label">Cast as <b>The maker</b></span></div>
+        <h3>Producer</h3>
+        <p class="desc">Creates an item and attempts to place it into the buffer.</p>
+        <button class="flip-btn" type="button" aria-expanded="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.5-3.6M13 2.5v2.6h-2.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>OS view</button>
+      </article>
+      <article class="face back">
+        <p class="os-term">OS role · producer process or thread</p>
+        <dl class="facts">
+          <div><dt>Calls</dt><dd><code>wait(empty)</code> · <code>wait(mutex)</code> · <code>signal(mutex)</code> · <code>signal(full)</code></dd></div>
+          <div><dt>Blocks when</dt><dd><code>empty = 0</code>, every slot is taken</dd></div>
+          <div><dt>Wakes when</dt><dd>the consumer calls <code>signal(empty)</code></dd></div>
+        </dl>
+        <button class="flip-btn" type="button" aria-expanded="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8a5 5 0 1 0 1.5-3.6M3 2.5v2.6h2.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Story view</button>
+      </article>
+    </div></div></div>
+
+    <div class="cast-wrap reveal" style="--d:.08s"><div class="tilt"><div class="flip">
+      <article class="face front">
+        <div class="cast-top"><span class="badge b" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span class="film-label">Cast as <b>The shared stage</b></span></div>
+        <h3>Buffer</h3>
+        <p class="desc">Holds a limited number of items between production and consumption.</p>
+        <button class="flip-btn" type="button" aria-expanded="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.5-3.6M13 2.5v2.6h-2.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>OS view</button>
+      </article>
+      <article class="face back">
+        <p class="os-term">OS role · bounded buffer, capacity N = 5</p>
+        <dl class="facts">
+          <div><dt>Shared state</dt><dd>five slots plus the <code>in</code> and <code>out</code> positions</dd></div>
+          <div><dt>Protected by</dt><dd><code>mutex</code>, one worker inside at a time</dd></div>
+          <div><dt>Always true</dt><dd>0 ≤ items ≤ 5, so it never overflows or underflows</dd></div>
+        </dl>
+        <button class="flip-btn" type="button" aria-expanded="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8a5 5 0 1 0 1.5-3.6M3 2.5v2.6h2.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Story view</button>
+      </article>
+    </div></div></div>
+
+    <div class="cast-wrap reveal" style="--d:.16s"><div class="tilt"><div class="flip">
+      <article class="face front">
+        <div class="cast-top"><span class="badge c" aria-hidden="true">C</span><span class="film-label">Cast as <b>The receiver</b></span></div>
+        <h3>Consumer</h3>
+        <p class="desc">Takes an available item from the buffer and processes it.</p>
+        <button class="flip-btn" type="button" aria-expanded="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.5-3.6M13 2.5v2.6h-2.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>OS view</button>
+      </article>
+      <article class="face back">
+        <p class="os-term">OS role · consumer process or thread</p>
+        <dl class="facts">
+          <div><dt>Calls</dt><dd><code>wait(full)</code> · <code>wait(mutex)</code> · <code>signal(mutex)</code> · <code>signal(empty)</code></dd></div>
+          <div><dt>Blocks when</dt><dd><code>full = 0</code>, nothing to take</dd></div>
+          <div><dt>Wakes when</dt><dd>the producer calls <code>signal(full)</code></dd></div>
+        </dl>
+        <button class="flip-btn" type="button" aria-expanded="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8a5 5 0 1 0 1.5-3.6M3 2.5v2.6h2.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Story view</button>
+      </article>
+    </div></div></div>
+  </div>
+
+  <div class="glass wnc reveal">
+    <div><span class="eyebrow">Want</span><strong>Keep working</strong></div>
+    <div><span class="eyebrow">Need</span><strong>Coordinate access</strong></div>
+    <div><span class="eyebrow">Conflict</span><strong>Limited space and different speeds</strong></div>
+  </div>
+
+  <details class="screenplay">
+    <summary>Screenplay breakdown: each film term beside its OS meaning</summary>
+    <div class="glass table-wrap">
+      <table>
+        <thead><tr><th scope="col">Film term</th><th scope="col">In this project</th></tr></thead>
+        <tbody>
+          <tr><td>Protagonists</td><td>The producer and consumer: two cooperating workers, not enemies.</td></tr>
+          <tr><td>Setting</td><td>A shared buffer with a fixed number of slots.</td></tr>
+          <tr><td>Want</td><td>The producer wants to add its next item; the consumer wants to take its next item.</td></tr>
+          <tr><td>Need</td><td>Both need coordination and safe access to the shared buffer.</td></tr>
+          <tr><td>Conflict</td><td>They work at different speeds, face limited capacity, and can compete for shared access.</td></tr>
+          <tr><td>Stakes</td><td>Without correct coordination, buffer operations can violate capacity limits or interfere with shared state.</td></tr>
+          <tr><td>Turning point</td><td>Synchronization: track available slots and items, and protect buffer updates.</td></tr>
+          <tr><td>Resolution</td><td>Workers wait when necessary and resume when the required condition becomes available.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</section>
+
+<!-- SCENE 3 -->
+<section class="scene" id="conflict" data-no="03" aria-labelledby="t-conflict">
+  <header class="scene-head reveal">
+    <p class="slate"><span class="clap" aria-hidden="true"></span>Scene 03 <span class="sep">·</span> The conflict</p>
+    <h2 id="t-conflict">What can go wrong?</h2>
+    <p class="lede">Two workers at different speeds share five slots. Three situations come up again and again. Two of them only need patience. One needs a lock. Play each scene.</p>
+  </header>
+
+  <div class="conflict-grid">
+    <article class="glass scene-card reveal">
+      <div class="take-tag"><span class="eyebrow">Scene 3A</span><span class="verdict">Normal waiting</span></div>
+      <h3>No room left</h3>
+      <div class="mini-stage" id="sa-stage">
+        <span class="badge p sm" id="sa-p" aria-hidden="true">P</span>
+        <div class="slots tiny" id="sa-slots"></div>
+        <span class="badge c sm" id="sa-c" aria-hidden="true">C</span>
+      </div>
+      <p class="status-line" id="sa-status" data-kind="wait" aria-live="polite"><span class="sl-ico"></span><span class="sl-text"></span></p>
+      <p class="desc">The buffer is full, so the producer must wait until the consumer removes an item.</p>
+      <div class="row-ctl"><button class="btn small primary" id="sa-play" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l7-4.5z" fill="currentColor"/></svg><span>Play scene</span></button></div>
+    </article>
+
+    <article class="glass scene-card reveal" style="--d:.08s">
+      <div class="take-tag"><span class="eyebrow">Scene 3B</span><span class="verdict">Normal waiting</span></div>
+      <h3>Nothing to take</h3>
+      <div class="mini-stage" id="sb-stage">
+        <span class="badge p sm" id="sb-p" aria-hidden="true">P</span>
+        <div class="slots tiny" id="sb-slots"></div>
+        <span class="badge c sm" id="sb-c" aria-hidden="true">C</span>
+      </div>
+      <p class="status-line" id="sb-status" data-kind="wait" aria-live="polite"><span class="sl-ico"></span><span class="sl-text"></span></p>
+      <p class="desc">The buffer is empty, so the consumer must wait until the producer adds an item.</p>
+      <div class="row-ctl"><button class="btn small primary" id="sb-play" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l7-4.5z" fill="currentColor"/></svg><span>Play scene</span></button></div>
+    </article>
+
+    <article class="glass scene-card race reveal" id="race">
+      <div class="race-head">
+        <div>
+          <div class="take-tag" style="justify-content:flex-start"><span class="eyebrow">Scene 3C</span><span class="verdict hazard">Needs a lock</span></div>
+          <h3>Two hands on the same control</h3>
+          <p class="desc">Adding and removing items involve shared data. Here both workers update one shared counter, <code>count</code>, in three machine steps each. Run it without the lock, then with it.</p>
+        </div>
+        <div class="seg" role="group" aria-label="Lock mode">
+          <button type="button" id="race-off" data-lock="off" aria-pressed="true">Without lock</button>
+          <button type="button" id="race-on" data-lock="on" aria-pressed="false">With lock</button>
+        </div>
+      </div>
+      <div class="race-body">
+        <div class="cpu">
+          <header><span class="who"><span class="badge p sm" aria-hidden="true">P</span>Producer</span><span class="reg">r1 = <b id="race-r1">–</b></span></header>
+          <ol id="race-p-list" aria-label="Producer steps"></ol>
+        </div>
+        <div class="shared" id="race-shared">
+          <p class="eyebrow">Shared variable</p>
+          <p class="count">count<b id="race-count">3</b></p>
+          <p class="truth">One add and one remove, so it should end at 3</p>
+          <p class="lockchip" id="race-lock">mutex: not used</p>
+        </div>
+        <div class="cpu">
+          <header><span class="who"><span class="badge c sm" aria-hidden="true">C</span>Consumer</span><span class="reg">r2 = <b id="race-r2">–</b></span></header>
+          <ol id="race-c-list" aria-label="Consumer steps"></ol>
+        </div>
+      </div>
+      <p class="status-line" id="race-status" data-kind="busy" aria-live="polite"><span class="sl-ico"></span><span class="sl-text"></span></p>
+      <div class="row-ctl">
+        <button class="btn small primary" id="race-play" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l7-4.5z" fill="currentColor"/></svg><span>Run the interleaving</span></button>
+        <button class="btn small" id="race-step" type="button">Step</button>
+        <button class="btn small ghost" id="race-reset" type="button">Reset</button>
+      </div>
+    </article>
+  </div>
+
+  <div class="callout reveal">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 9v5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="10" cy="6.2" r="1.1" fill="currentColor"/></svg>
+    <p><strong>A full or empty buffer is not an error.</strong> It is a normal reason to wait, and the waiting worker resumes as soon as the other one acts. It is not a deadlock either. Scene 3C is different: without a lock, two overlapping updates to shared data can silently lose one of them.</p>
+  </div>
+</section>
+
+<!-- SCENE 4 -->
+<section class="scene" id="rules" data-no="04" aria-labelledby="t-rules">
+  <header class="scene-head reveal">
+    <p class="slate"><span class="clap" aria-hidden="true"></span>Scene 04 <span class="sep">·</span> The turning point</p>
+    <h2 id="t-rules">Three controls keep the stage in order</h2>
+    <p class="lede">Two counting semaphores track what is available. One binary semaphore lets a single worker update the buffer at a time. Play either worker’s cycle and watch the three values change.</p>
+  </header>
+
+  <div class="grid-3">
+    <article class="glass counter reveal" id="pgc-empty">
+      <p class="eyebrow">Counting semaphore</p>
+      <h3>empty</h3>
+      <p class="counter-value"><b id="pg-empty">5</b><span>starts at capacity</span></p>
+      <p class="desc">Available spaces the producer can reserve.</p>
+      <p class="analogy">Availability coordinator for the producer.</p>
+    </article>
+    <article class="glass counter reveal" id="pgc-full" style="--d:.08s">
+      <p class="eyebrow">Counting semaphore</p>
+      <h3>full</h3>
+      <p class="counter-value"><b id="pg-full">0</b><span>starts at zero</span></p>
+      <p class="desc">Available items the consumer can reserve.</p>
+      <p class="analogy">Availability coordinator for the consumer.</p>
+    </article>
+    <article class="glass counter reveal" id="pgc-mutex" style="--d:.16s">
+      <p class="eyebrow">Binary semaphore (mutex)</p>
+      <h3>mutex</h3>
+      <p class="counter-value"><b id="pg-mutex">1</b><span id="pg-mutex-sub">unlocked</span></p>
+      <p class="desc">Permission to enter the buffer’s critical section.</p>
+      <p class="analogy">The one-worker-at-a-time rule for the shared stage.</p>
+    </article>
+  </div>
+
+  <div class="glass lanes reveal">
+    <div class="lanes-head">
+      <h3>Each worker’s cycle</h3>
+      <div class="pg-buffer"><span class="eyebrow">Buffer</span><div class="slots tiny" id="pg-slots"></div></div>
+    </div>
+    <div class="legend" aria-label="Legend">
+      <span><i class="avail"></i>Wait for availability</span>
+      <span><i class="lock"></i>Lock or unlock</span>
+      <span><i class="cs"></i>Critical section</span>
+      <span><i></i>Plain step</span>
+    </div>
+    <div class="lane">
+      <div class="lane-side">
+        <p class="lane-name"><span class="badge p" aria-hidden="true">P</span>Producer</p>
+        <button class="btn small primary" id="pg-play-p" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l7-4.5z" fill="currentColor"/></svg>Play cycle</button>
+      </div>
+      <ol class="chips" id="pg-lane-p">
+        <li class="chip">Create item<code>produce(item)</code></li>
+        <li class="chip avail">Wait for space<code>wait(empty)</code></li>
+        <li class="chip lock">Lock<code>wait(mutex)</code></li>
+        <li class="chip cs">Add item<code>buffer[in]</code></li>
+        <li class="chip lock">Unlock<code>signal(mutex)</code></li>
+        <li class="chip">Signal item available<code>signal(full)</code></li>
+      </ol>
+    </div>
+    <div class="lane">
+      <div class="lane-side">
+        <p class="lane-name"><span class="badge c" aria-hidden="true">C</span>Consumer</p>
+        <button class="btn small sage" id="pg-play-c" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l7-4.5z" fill="currentColor"/></svg>Play cycle</button>
+      </div>
+      <ol class="chips" id="pg-lane-c">
+        <li class="chip avail">Wait for item<code>wait(full)</code></li>
+        <li class="chip lock">Lock<code>wait(mutex)</code></li>
+        <li class="chip cs">Remove item<code>buffer[out]</code></li>
+        <li class="chip lock">Unlock<code>signal(mutex)</code></li>
+        <li class="chip">Signal space available<code>signal(empty)</code></li>
+        <li class="chip">Process item<code>consume(item)</code></li>
+      </ol>
+    </div>
+    <div class="row-ctl" style="justify-content:space-between">
+      <p class="status-line" id="pg-msg" data-kind="ok" aria-live="polite" style="flex:1;min-width:min(100%,280px)"><span class="sl-ico"></span><span class="sl-text">Press Play cycle on the producer. Then try the consumer, or try the consumer first and see what happens.</span></p>
+      <button class="btn small ghost" id="pg-reset" type="button">Reset values</button>
+    </div>
+  </div>
+
+  <div class="callout reveal">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="9" width="12" height="8.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6.8 9V6.6a3.2 3.2 0 0 1 6.4 0V9" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+    <p><strong>Order matters.</strong> Each worker waits for space or an item before it takes the lock. If a worker took the lock first, it could end up holding it while it waits, and the other worker could never get in to free what it needs. The Blooper take in Scene 06 shows exactly that.</p>
+  </div>
+</section>
+
+<!-- SCENE 5 -->
+<section class="scene" id="simulator" data-no="05" aria-labelledby="t-sim">
+  <header class="scene-head reveal">
+    <p class="slate"><span class="clap" aria-hidden="true"></span>Scene 05 <span class="sep">·</span> The climax</p>
+    <h2 id="t-sim">Run the shared buffer</h2>
+    <p class="lede">Request single operations, run both workers on a loop, or pause and step through one synchronization event at a time. Every <code>wait()</code> and <code>signal()</code> lands in the event log.</p>
+    <p class="honest">This is an interactive synchronization simulator. It models each semaphore operation as an explicit event in your browser. It does not run operating-system threads.</p>
+  </header>
+
+  <div class="glass sim" id="sim">
+    <div class="sim-bar">
+      <div>
+        <p class="sim-title">The shared buffer</p>
+        <p class="sim-sub"><span id="cap-label">Capacity 5</span> · 1 producer · 1 consumer · one event per wait, signal or buffer update</p>
+      </div>
+      <div class="sim-bar-right">
+        <span class="mode" id="mode" data-mode="manual"><span class="dot"></span><span id="mode-text">Manual</span></span>
+        <span class="tc" id="tc">00:00:00:00</span>
+      </div>
+    </div>
+
+    <div class="banner" id="blooper-banner" hidden>
+      <span>Blooper take: the producer calls <code>wait(mutex)</code> before <code>wait(empty)</code>.</span>
+      <button class="link-btn" id="restore-order" type="button">Restore the correct order</button>
+    </div>
+
+    <div class="stage">
+      <article class="worker" id="w-producer" aria-label="Producer"></article>
+      <div class="buffer-col">
+        <div class="occ"><span>Occupied</span><b id="occ">0/5</b></div>
+        <div class="slots" id="sim-slots"></div>
+        <div class="ptrs" id="sim-ptrs" aria-hidden="true"></div>
+        <div class="sems">
+          <div class="sem" id="sem-empty"><p class="sem-name">empty</p><p class="sem-val" id="v-empty">5</p><div class="pips" id="p-empty"></div><p class="sem-sub">free slots to reserve</p><p class="waiter" id="q-empty" hidden></p></div>
+          <div class="sem" id="sem-full"><p class="sem-name">full</p><p class="sem-val" id="v-full">0</p><div class="pips" id="p-full"></div><p class="sem-sub">items ready to take</p><p class="waiter" id="q-full" hidden></p></div>
+          <div class="sem" id="sem-mutex"><p class="sem-name">mutex</p><p class="sem-val" id="v-mutex">1</p><p class="lock-state" id="l-mutex">Unlocked</p><p class="waiter" id="q-mutex" hidden></p></div>
+        </div>
+        <p class="fine"><code>empty</code> and <code>full</code> count reservations, so while a worker is mid-operation they can add up to less than <span id="cap-n">5</span>.</p>
+      </div>
+      <article class="worker" id="w-consumer" aria-label="Consumer"></article>
+    </div>
+
+    <div class="note" id="note" data-kind="ok"><span class="note-label">Director’s note</span><p id="note-text"></p></div>
+
+    <div class="controls" role="group" aria-label="Simulator controls">
+      <div class="ctl-group">
+        <button class="btn primary" id="btn-produce" type="button">Produce</button>
+        <button class="btn sage" id="btn-consume" type="button">Consume</button>
+      </div>
+      <div class="ctl-group">
+        <button class="btn" id="btn-auto" type="button" aria-pressed="false">Auto Run</button>
+        <button class="btn" id="btn-pause" type="button" aria-pressed="false">Pause</button>
+        <button class="btn" id="btn-step" type="button">Step</button>
+      </div>
+      <button class="btn ghost btn-reset" id="btn-reset" type="button">Reset</button>
+    </div>
+    <p class="kbd-row" aria-label="Keyboard shortcuts">
+      <span><kbd data-k="p">P</kbd>produce</span><span><kbd data-k="c">C</kbd>consume</span><span><kbd data-k="a">A</kbd>auto</span>
+      <span><kbd data-k="k">K</kbd>pause</span><span><kbd data-k="s">S</kbd>step</span><span><kbd data-k="j">J</kbd><kbd data-k="l">L</kbd>slower / faster</span><span><kbd data-k="r">R</kbd>reset</span>
+    </p>
+
+    <div class="tuning">
+      <div class="slider">
+        <label for="r-producer">Producer interval <span>time to create one item</span></label>
+        <div class="slider-row"><input type="range" id="r-producer" min="0.3" max="4" step="0.1" value="1.2"><output id="o-producer" for="r-producer">1.2 s</output></div>
+      </div>
+      <div class="slider">
+        <label for="r-consumer">Consumer interval <span>time to process one item</span></label>
+        <div class="slider-row"><input type="range" id="r-consumer" min="0.3" max="4" step="0.1" value="1.8"><output id="o-consumer" for="r-consumer">1.8 s</output></div>
+      </div>
+      <div class="ctl-block">
+        <p class="ctl-label" id="speed-label">Playback</p>
+        <div class="seg" role="group" aria-labelledby="speed-label" id="speed-seg">
+          <button type="button" id="speed-05" data-speed="0.5" aria-pressed="false">0.5×</button>
+          <button type="button" id="speed-1" data-speed="1" aria-pressed="true">1×</button>
+          <button type="button" id="speed-2" data-speed="2" aria-pressed="false">2×</button>
+          <button type="button" id="speed-4" data-speed="4" aria-pressed="false">4×</button>
+        </div>
+      </div>
+      <div class="ctl-block">
+        <p class="ctl-label" id="cap-ctl-label">Buffer slots</p>
+        <div class="seg" role="group" aria-labelledby="cap-ctl-label" id="cap-seg">
+          <button type="button" id="cap-3" data-cap="3" aria-pressed="false">3</button>
+          <button type="button" id="cap-4" data-cap="4" aria-pressed="false">4</button>
+          <button type="button" id="cap-5" data-cap="5" aria-pressed="true">5</button>
+          <button type="button" id="cap-6" data-cap="6" aria-pressed="false">6</button>
+          <button type="button" id="cap-8" data-cap="8" aria-pressed="false">8</button>
+        </div>
+      </div>
+      <p class="tuning-note"><b>Shorter interval = faster worker.</b> Each wait, signal and buffer update takes 0.3 s at 1× so you can follow it. Changing the slot count resets the stage.</p>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-head"><p>Occupancy, last 45 seconds</p>
+        <p class="legend-line"><span><i class="l"></i>items in buffer</span><span><i class="a"></i>producer waiting</span><span><i class="s"></i>consumer waiting</span><span><i class="d"></i>deadlock</span></p>
+      </div>
+      <canvas class="chart" id="chart" role="img" aria-label="Line chart of buffer occupancy over the last 45 seconds, with shaded bands where a worker was waiting"></canvas>
+    </div>
+
+    <div class="log-wrap">
+      <div class="log-head"><p>Event log</p><p>Newest first · one line per synchronization event</p></div>
+      <ol class="log" id="log" aria-label="Event log"></ol>
+    </div>
+  </div>
+</section>
+
+<!-- SCENE 6 -->
+<section class="scene" id="takes" data-no="06" aria-labelledby="t-takes">
+  <header class="scene-head reveal">
+    <p class="slate"><span class="clap" aria-hidden="true"></span>Scene 06 <span class="sep">·</span> Alternate takes</p>
+    <h2 id="t-takes">Same script, four takes</h2>
+    <p class="lede">Each take resets the stage, sets both intervals and starts Auto Run on the simulator above. The monitor shows who ends up waiting, and why.</p>
+  </header>
+
+  <div class="takes-grid">
+    <div class="takes">
+      <button class="glass take reveal" type="button" data-take="pfast" aria-pressed="false">
+        <span class="take-no">Take 1</span><span class="take-name">Producer runs faster</span>
+        <span class="take-meta">Producer 0.4 s · Consumer 3.6 s · starts with 2 items</span>
+        <span class="take-watch">The buffer tends to fill. Watch the producer end up waiting for space.</span>
+        <span class="take-cta">Roll take →</span>
+      </button>
+      <button class="glass take reveal" type="button" data-take="cfast" aria-pressed="false" style="--d:.06s">
+        <span class="take-no">Take 2</span><span class="take-name">Consumer runs faster</span>
+        <span class="take-meta">Producer 3.6 s · Consumer 0.4 s · starts with 3 items</span>
+        <span class="take-watch">The buffer tends to empty. Watch the consumer end up waiting for an item.</span>
+        <span class="take-cta">Roll take →</span>
+      </button>
+      <button class="glass take reveal" type="button" data-take="even" aria-pressed="false" style="--d:.12s">
+        <span class="take-no">Take 3</span><span class="take-name">Similar speeds</span>
+        <span class="take-meta">Producer 1.5 s · Consumer 1.5 s · starts with 2 items</span>
+        <span class="take-watch">Items move through with little waiting. Now and then one worker briefly waits for the lock.</span>
+        <span class="take-cta">Roll take →</span>
+      </button>
+      <button class="glass take blooper reveal" type="button" data-take="blooper" aria-pressed="false" style="--d:.18s">
+        <span class="take-no">Blooper</span><span class="take-name">Producer locks first</span>
+        <span class="take-meta">Producer 0.4 s · Consumer 3.6 s · starts with 3 items</span>
+        <span class="take-watch">The producer swaps two lines and takes the lock before checking for space. Once the buffer fills, nobody can move.</span>
+        <span class="take-cta">Roll the blooper →</span>
+      </button>
+    </div>
+
+    <aside class="glass monitor reveal" aria-label="Live monitor of the simulator">
+      <div class="mon-head">
+        <p class="mon-title"><span class="rec" id="m-rec" aria-hidden="true"></span>Monitor</p>
+        <span class="tc" id="m-tc">00:00:00:00</span>
+      </div>
+      <p class="mon-take" id="m-take">No take rolling. Mirroring the simulator above.</p>
+      <div class="slots mini" id="m-slots"></div>
+      <dl class="mon-dl">
+        <div><dt>Producer</dt><dd><span class="pill" id="m-p" data-kind="ready"><span class="pill-ico"></span><span class="pill-text">Ready</span></span></dd></div>
+        <div><dt>Consumer</dt><dd><span class="pill" id="m-c" data-kind="ready"><span class="pill-ico"></span><span class="pill-text">Ready</span></span></dd></div>
+      </dl>
+      <dl class="mon-vals">
+        <div><dt>empty</dt><dd id="m-empty">5</dd></div>
+        <div><dt>full</dt><dd id="m-full">0</dd></div>
+        <div><dt>mutex</dt><dd id="m-mutex">1</dd></div>
+      </dl>
+      <canvas class="chart mini" id="m-chart" role="img" aria-label="Occupancy over the last 45 seconds"></canvas>
+      <dl class="mon-dl">
+        <div><dt>Producer time waiting</dt><dd id="m-pw">0.0 s</dd></div>
+        <div><dt>Consumer time waiting</dt><dd id="m-cw">0.0 s</dd></div>
+        <div><dt>Items consumed</dt><dd id="m-done">0</dd></div>
+      </dl>
+      <div class="note" id="m-note" data-kind="ok"><span class="note-label">Why</span><p id="m-note-text"></p></div>
+      <div class="mon-foot">
+        <button class="btn small" id="m-pause" type="button" aria-pressed="false">Pause</button>
+        <a class="mon-link" href="#simulator">Open the full simulator ↑</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- SCENE 7 -->
+<section class="scene" id="logic" data-no="07" aria-labelledby="t-logic">
+  <header class="scene-head reveal">
+    <p class="slate"><span class="clap" aria-hidden="true"></span>Scene 07 <span class="sep">·</span> End credits</p>
+    <h2 id="t-logic">The script behind the scenes</h2>
+    <p class="lede">The simulator runs exactly these two programs. While it runs, the line each worker is on lights up here too.</p>
+    <p class="live-chip" id="live-chip"><span class="dot" aria-hidden="true"></span><span id="live-text">Following the simulator</span></p>
+  </header>
+
+  <div class="code-panels">
+    <article class="glass code-panel reveal">
+      <header><span class="badge p" aria-hidden="true">P</span><h3>Producer</h3></header>
+      <div class="code-scroll">
+        <div class="pcode" data-role="producer" role="figure" aria-label="Producer pseudocode">
+          <div class="row" data-key="produce"><span class="n">1</span><span class="k"><em>produce</em>(item)</span><span class="c">// make the next item</span></div>
+          <div class="row" data-key="wait:empty"><span class="n">2</span><span class="k"><em>wait</em>(empty)</span><span class="c">// reserve a free slot, or wait</span></div>
+          <div class="row" data-key="wait:mutex"><span class="n">3</span><span class="k"><em>wait</em>(mutex)</span><span class="c">// enter the critical section</span></div>
+          <div class="row" data-key="put"><span class="n">4</span><span class="k">add item to buffer</span><span class="c">// buffer[in] = item; in = (in + 1) % N</span></div>
+          <div class="row" data-key="signal:mutex"><span class="n">5</span><span class="k"><em>signal</em>(mutex)</span><span class="c">// leave the critical section</span></div>
+          <div class="row" data-key="signal:full"><span class="n">6</span><span class="k"><em>signal</em>(full)</span><span class="c">// one more item is available</span></div>
+        </div>
+      </div>
+    </article>
+    <article class="glass code-panel reveal" style="--d:.08s">
+      <header><span class="badge c" aria-hidden="true">C</span><h3>Consumer</h3></header>
+      <div class="code-scroll">
+        <div class="pcode" data-role="consumer" role="figure" aria-label="Consumer pseudocode">
+          <div class="row" data-key="wait:full"><span class="n">1</span><span class="k"><em>wait</em>(full)</span><span class="c">// reserve an item, or wait</span></div>
+          <div class="row" data-key="wait:mutex"><span class="n">2</span><span class="k"><em>wait</em>(mutex)</span><span class="c">// enter the critical section</span></div>
+          <div class="row" data-key="take"><span class="n">3</span><span class="k">remove item from buffer</span><span class="c">// item = buffer[out]; out = (out + 1) % N</span></div>
+          <div class="row" data-key="signal:mutex"><span class="n">4</span><span class="k"><em>signal</em>(mutex)</span><span class="c">// leave the critical section</span></div>
+          <div class="row" data-key="signal:empty"><span class="n">5</span><span class="k"><em>signal</em>(empty)</span><span class="c">// one more slot is free</span></div>
+          <div class="row" data-key="consume"><span class="n">6</span><span class="k"><em>consume</em>(item)</span><span class="c">// process it outside the lock</span></div>
+        </div>
+      </div>
+    </article>
+  </div>
+  <p class="init">Initial values: empty = N · full = 0 · mutex = 1 (N = 5 by default)</p>
+
+  <div class="takeaways reveal">
+    <div><strong>Synchronization</strong><p>decides when a worker can proceed. <code>wait(empty)</code> and <code>wait(full)</code> hold a worker back until the other one makes room or delivers.</p></div>
+    <div><strong>Mutual exclusion</strong><p>protects shared-buffer updates. <code>mutex</code> lets exactly one worker inside the critical section at a time.</p></div>
+    <div><strong>Buffer management</strong><p>tracks available space and items. Two counters and two indices, <code>in</code> and <code>out</code>, wrap around the slots.</p></div>
+  </div>
+
+  <div class="qa">
+    <h3 class="reveal">Questions from the screening</h3>
+    <dl class="qa-grid">
+      <div class="qa-item reveal"><dt>Why two counters instead of one?</dt><dd>A semaphore only makes a worker wait when its value is zero. <code>empty</code> reaches zero when the buffer is full, which stops the producer. <code>full</code> reaches zero when the buffer is empty, which stops the consumer. A single counter could only block one side.</dd></div>
+      <div class="qa-item reveal" style="--d:.06s"><dt>What does the mutex protect?</dt><dd>The buffer slots and their bookkeeping: the <code>in</code> and <code>out</code> positions and any shared count. Scene 3C shows an update being lost without it, and with several producers or consumers two of them could pick the same slot.</dd></div>
+      <div class="qa-item reveal"><dt>What happens when the buffer fills or empties?</dt><dd>The producer blocks in <code>wait(empty)</code> until the consumer’s <code>signal(empty)</code> wakes it, or the consumer blocks in <code>wait(full)</code> until the producer’s <code>signal(full)</code>. This is ordinary waiting, not deadlock.</dd></div>
+      <div class="qa-item reveal" style="--d:.06s"><dt>Why wait for availability before locking?</dt><dd>A worker that holds the lock while it waits stops the other worker from ever changing the condition it is waiting for. The Blooper take turns that into a visible deadlock.</dd></div>
+    </dl>
+  </div>
+
+  <div class="glass credits reveal">
+    <p class="wordmark">BufferOps</p>
+    <p class="sub">The Shared Space</p>
+    <dl class="credit-rows">
+      <div class="credit-row"><dt>Problem</dt><dd>Producer–Consumer, bounded-buffer version</dd></div>
+      <div class="credit-row"><dt>Primitives</dt><dd>Counting semaphores <code>empty</code> and <code>full</code>, binary semaphore <code>mutex</code></dd></div>
+      <div class="credit-row"><dt>Starring</dt><dd>One producer, one consumer, a buffer of 3 to 8 slots</dd></div>
+      <div class="credit-row"><dt>Team</dt><dd><span class="todo">Team member 1</span><br><span class="todo">Team member 2</span><br><span class="todo">Team member 3</span></dd></div>
+      <div class="credit-row"><dt>Course</dt><dd><span class="todo">Course code and title</span></dd></div>
+      <div class="credit-row"><dt>Faculty</dt><dd><span class="todo">Faculty name</span></dd></div>
+      <div class="credit-row"><dt>Institution</dt><dd><span class="todo">Institution name</span></dd></div>
+      <div class="credit-row"><dt>Built with</dt><dd>HTML, CSS and JavaScript, no libraries</dd></div>
+      <div class="credit-row"><dt>Simulation model</dt><dd>Discrete events: each <code>wait</code>, <code>signal</code> and buffer update is one step. Blocked workers join the semaphore’s queue and are woken by the matching signal.</dd></div>
+      <div class="credit-row"><dt>Scope note</dt><dd>A browser simulation, not OS threads. Pair it with a threaded program that shares a buffer through real semaphores and a lock.</dd></div>
+    </dl>
+    <p class="signoff">Two workers. One shared space.<br>Perfect coordination.</p>
+  </div>
+
+  <p class="footer">BufferOps · an interactive synchronization simulator for the Producer–Consumer Problem</p>
+</section>
+
+</main>
+
+<script src="simulation.js"></script>
+</body>
+</html>
